@@ -1,0 +1,135 @@
+body {
+    background-color: rgb(61, 71, 78);
+}
+
+h1 {
+    color: rgb(255, 255, 255);
+    font: bold;
+}
+
+h2 {
+    color: white;
+}
+
+h5 {
+    color: white;
+}
+
+p {
+    text-align: center;
+    width: 50%;
+}
+
+.CenterDiv {
+    display: flex;
+    justify-content: center; 
+}
+
+.Divider {
+    width: 50%;
+    height: .25vh;
+    border-radius: 50%;
+    background: linear-gradient(to right, 
+    rgba(0, 0, 0, 0), 
+    rgba(0, 0, 0, 0.25), 
+    rgba(0, 0, 0, 0));
+}
+
+.ItemHolder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1%;
+    width: 98%;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 3vh;
+}
+
+.Item {
+    justify-content: center;
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1.5;
+    width: 15%; 
+    color: rgb(255, 255, 255);
+    background-color: rgb(150, 150, 150);
+    border: .3vw solid rgb(66, 66, 66);
+    border-style:solid;
+    margin: .3%;
+    cursor: pointer;
+    border-radius: 10%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.1s ease, box-shadow 0.1s ease; /* Smooth transition for click effect */
+    background: linear-gradient(to bottom right, rgb(175, 175, 175), rgb(122, 122, 122));
+}
+
+.ImageDiv {
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1;
+    width: 80%; /* This will control the size while maintaining the aspect ratio */
+    /* Removed the height property */
+    background-color: rgb(135,135,135);
+    margin: 10%;
+    background: radial-gradient(circle, rgba(153, 153, 153, 0.5), rgb(135,135,135) 70%);
+}
+
+
+.Image {
+    width: 100%;
+    height: 100%;
+}
+
+.FlexDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.stats-container {
+    align-self: flex-start;
+    background-color: rgb(167, 167, 167);
+    border-bottom-right-radius: 11%;
+    border-bottom-left-radius: 11%;
+    padding: 10px; /* Adjust padding if necessary */
+    color: #ffffff; /* White text color */
+    width: 100%; /* Width of the container */
+    height: auto; /* Adjust height to 'auto' if you want it to contain all the content */
+    box-shadow: 0px 0px 3vh rgba(71, 71, 71, 0.5);
+    background: linear-gradient(to bottom, rgb(116, 116, 116), rgb(156, 156, 156));
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.title {
+    text-align: center; /* Center the title */
+    font-size: 16px; /* Size of the title text */
+    margin-bottom: 10px; /* Spacing after the title */
+    white-space: nowrap; /* Keep the title in a single line */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis at the end if the title is too long */
+}
+
+.stat-row {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between the stat name and value */
+}
+
+.stat-name, .stat-value {
+    flex-basis: 50%; /* Each takes half the width */
+    text-align: left; /* Align the text to the left */
+}
+
+.stat-value {
+    text-align: right; /* Align the value text to the right */
+}
+
+.Item:hover {
+    background-color: rgb(160, 160, 160);
+    border-color: rgb(200,200,200);
+    box-shadow: 0px 0px 3vh rgba(255, 255, 255, 0.5);
+}
+
+.Item:active {
+    transform: scale(0.96); /* Slightly scale down the item */
+    box-shadow: 0px 0px 3vh rgb(0, 0, 0);
+
+}
