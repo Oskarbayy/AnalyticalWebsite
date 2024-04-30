@@ -1,5 +1,16 @@
 {
   "dependencies": {
-    "bootstrap": "^5.3.3"
-  }
+    "bootstrap": "^5.3.3",
+    "express": "^4.19.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "petsim99project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

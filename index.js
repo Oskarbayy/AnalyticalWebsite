@@ -52,7 +52,8 @@ function formatInt(number) {
     let assetId = assetString.replace(/\D/g, '');
 
     // Set the image source
-    main.querySelector('.Image').src = `https://biggamesapi.io/image/${assetId}`;
+
+     // // // main.querySelector('.Image').src = `https://biggamesapi.io/image/${assetId}`;
 
     return main;
 }
