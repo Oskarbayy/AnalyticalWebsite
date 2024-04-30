@@ -129,9 +129,7 @@ function renderPets(pets) {
 document.addEventListener('DOMContentLoaded', async function(){
 
     const allPets = await GetData();
-    console.log("Get data is done")
 
-    console.log(allPets)
     renderPets(allPets);
 
     const searchBox = document.getElementById('search-box');
@@ -144,32 +142,106 @@ document.addEventListener('DOMContentLoaded', async function(){
     goldenCheckbox.addEventListener('change', filterAndSortPets);
     rainbowCheckbox.addEventListener('change', filterAndSortPets);
 
-async function filterAndSortPets() {
-    const searchTerm = searchBox.value.toLowerCase();
-    const normalChecked = normalCheckbox.checked;
-    const goldenChecked = goldenCheckbox.checked;
-    const rainbowChecked = rainbowCheckbox.checked;
+    async function filterAndSortPets() {
+        const searchTerm = searchBox.value.toLowerCase();
+        const searchTerms = searchTerm.split(' ').filter(term => term.trim() !== ''); // Split into individual words and remove empty entries
+        const normalChecked = normalCheckbox.checked;
+        const goldenChecked = goldenCheckbox.checked;
+        const rainbowChecked = rainbowCheckbox.checked;
+    
+        // Function to calculate Levenshtein distance
+        function getLevenshteinDistance(a, b) {
+            const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+    
+            for (let i = 0; i <= a.length; i += 1) {
+                matrix[0][i] = i;
+            }
+            for (let j = 0; j <= b.length; j += 1) {
+                matrix[j][0] = j;
+            }
+    
+            for (let j = 1; j <= b.length; j += 1) {
+                for (let i = 1; i <= a.length; i += 1) {
+                    const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
+                    matrix[j][i] = Math.min(
+                        matrix[j][i - 1] + 1, // deletion
+                        matrix[j - 1][i] + 1, // insertion
+                        matrix[j - 1][i - 1] + indicator, // substitution
+                    );
+                }
+            }
+    
+            return matrix[b.length][a.length];
+        }
+    
+        // Function to calculate a customized fuzzy match score using Levenshtein distance
+        function calculateFuzzyMatchScore(name, terms) {
+            if (!terms.length) return 0;
+            return terms.reduce((totalScore, term) => {
+                let termScore = Infinity;
+                // This will account for matching any segment of the name that includes the term
+                for (let i = 0; i <= name.length - term.length; i++) {
+                    const part = name.substring(i, i + term.length);
+                    termScore = Math.min(termScore, getLevenshteinDistance(part, term));
+                }
+                totalScore += (term.length - termScore) / term.length; // Normalize by term length
+                return totalScore;
+            }, 0) / terms.length;
+        }
+    
+        let filteredPets = allPets.filter(pet => {
+            const name = pet.configName.toLowerCase();
+            const isNormal = pet.Variant === 'Normal' && normalChecked;
+            const isGolden = pet.Variant === 'Golden' && goldenChecked;
+            const isRainbow = pet.Variant === 'Rainbow' && rainbowChecked;
+            // Show all pets if no input, or filter based on the fuzzy score
+            return (searchTerms.length === 0 || calculateFuzzyMatchScore(name, searchTerms) > 0.5) && (isNormal || isGolden || isRainbow);
+        });
+    
+        // Sort the pets based on the fuzzy match score and additional criteria
+        filteredPets.sort((a, b) => {
+            const nameA = a.configName.toLowerCase();
+            const nameB = b.configName.toLowerCase();
+            const scoreA = calculateFuzzyMatchScore(nameA, searchTerms);
+            const scoreB = calculateFuzzyMatchScore(nameB, searchTerms);
+    
+            if (scoreA !== scoreB) {
+                return scoreB - scoreA;
+            }
+    
+            // Count the occurrences of the search term's first letter in the name for tie-breaking
+            const countOccurrences = (name, char) => name.split(char).length - 1;
+            const firstChar = searchTerm.charAt(0);
+            const occurrencesA = countOccurrences(nameA, firstChar);
+            const occurrencesB = countOccurrences(nameB, firstChar);
+    
+            if (occurrencesA !== occurrencesB) {
+                return occurrencesB - occurrencesA;
+            }
+    
+            if (nameA.length !== nameB.length) {
+                return nameA.length - nameB.length;
+            }
+    
+            return nameA.localeCompare(nameB);
+        });
+    
+        // Render the filtered and sorted pets
+        renderPets(filteredPets);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    let filteredPets = allPets.filter(pet => {
-        const name = pet.configName.toLowerCase();
-        const matchesSearch = name.includes(searchTerm);
-        const startsWithSearch = name.startsWith(searchTerm);
-        const isNormal = pet.Variant === 'Normal' && normalChecked;
-        const isGolden = pet.Variant === 'Golden' && goldenChecked;
-        const isRainbow = pet.Variant === 'Rainbow' && rainbowChecked;
-        return (matchesSearch || startsWithSearch) && (isNormal || isGolden || isRainbow);
-    });
-
-    // Custom sorting logic based on name
-    filteredPets.sort((a, b) => {
-        const nameA = a.configName.toLowerCase();
-        const nameB = b.configName.toLowerCase();
-        return nameA.indexOf(searchTerm) - nameB.indexOf(searchTerm); // Sort by position of search term
-    });
-
-    // Render the filtered and sorted pets
-    renderPets(filteredPets);
-}
+    
 
 });
 

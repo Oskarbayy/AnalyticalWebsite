@@ -61,7 +61,7 @@ async function GetPet() {
     let assetId = assetString.replace(/\D/g, '');
 
     // // // //
-    document.querySelector('.Image').src = `https://assetdelivery.roblox.com/v1/asset?id=${assetId}`;
+    document.querySelector('.Image').src = `https://biggamesapi.io/image/${assetId}`;
     document.getElementById('Desc').textContent = hugePet.configData.indexDesc
 }
 
